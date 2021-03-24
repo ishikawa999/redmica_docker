@@ -22,6 +22,9 @@ RUN set -eux; \
 	[ -z "$savedAptMark" ] || apt-mark manual $savedAptMark; \
 	apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false
 
+# https://www.redmine.org/issues/34397, https://stackoverflow.com/questions/52861946/imagemagick-not-authorized-to-convert-pdf-to-an-image
+RUN cp /etc/ImageMagick-6/policy.xml /etc/ImageMagick-6/policy.xml.origin; sed -i 's/^.*policy.*coder.*none.*PDF.*//' /etc/ImageMagick-6/policy.xml
+
 # pre-download the PassengerAgent and the NGINX engine
 RUN set -eux; \
 	passenger-config install-agent; \
